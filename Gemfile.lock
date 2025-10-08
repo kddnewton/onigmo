@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     docile (1.4.0)
+    ostruct (0.6.3)
     power_assert (2.0.3)
     rake (13.0.6)
     rake-compiler (1.2.5)
@@ -20,6 +21,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler
+  ostruct
   rake
   rake-compiler
   simplecov

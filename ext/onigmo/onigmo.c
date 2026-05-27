@@ -455,7 +455,8 @@ compile(VALUE self, VALUE string) {
             }
             case OP_EXACTN: {
                 rb_ary_push(insn, ID2SYM(rb_intern("exactn")));
-                rb_ary_push(insn, read_length(&cursor));
+                length = NUM2INT(read_length(&cursor));
+                rb_ary_push(insn, read_exact(&cursor, length, encoding));
                 break;
             }
             case OP_EXACTMB2N1: {
@@ -494,10 +495,13 @@ compile(VALUE self, VALUE string) {
             case OP_EXACTMBN: {
                 rb_ary_push(insn, ID2SYM(rb_intern("exactmbn")));
 
+                VALUE char_length = read_length(&cursor);
+                rb_ary_push(insn, char_length);
+
                 VALUE length = read_length(&cursor);
                 rb_ary_push(insn, length);
 
-                rb_ary_push(insn, read_exact(&cursor, NUM2INT(length) * 2, encoding));
+                rb_ary_push(insn, read_exact(&cursor, NUM2INT(length) * NUM2INT(char_length), encoding));
                 break;
             }
             case OP_EXACT1_IC: {
@@ -508,7 +512,7 @@ compile(VALUE self, VALUE string) {
             }
             case OP_EXACTN_IC: {
                 rb_ary_push(insn, ID2SYM(rb_intern("exactn_ic")));
-                length = enclen(encoding, cursor, end);
+                length = NUM2INT(read_length(&cursor));
                 rb_ary_push(insn, read_exact(&cursor, length, encoding));
                 break;
             }
